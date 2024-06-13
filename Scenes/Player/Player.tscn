@@ -1,0 +1,156 @@
+[gd_scene load_steps=20 format=3 uid="uid://bo2ckip55nyrc"]
+
+[ext_resource type="Script" path="res://Scenes/Player/Player.cs" id="1_2ryrr"]
+[ext_resource type="Texture2D" uid="uid://ddbn8yqjxdmhg" path="res://Assets/Lamina.png" id="1_8314a"]
+[ext_resource type="Script" path="res://Scenes/Player/CameraMovement.cs" id="3_rp3ob"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t1bk2"]
+atlas = ExtResource("1_8314a")
+region = Rect2(0, 0, 30, 39)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3lnbx"]
+atlas = ExtResource("1_8314a")
+region = Rect2(0, 1, 30, 39)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_axd7b"]
+atlas = ExtResource("1_8314a")
+region = Rect2(30, 1, 30, 39)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5lw52"]
+atlas = ExtResource("1_8314a")
+region = Rect2(60, 1, 30, 39)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6hyux"]
+atlas = ExtResource("1_8314a")
+region = Rect2(90, 1, 30, 39)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3rjtd"]
+atlas = ExtResource("1_8314a")
+region = Rect2(0, 121, 30, 37)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t7iws"]
+atlas = ExtResource("1_8314a")
+region = Rect2(30, 121, 30, 37)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mr137"]
+atlas = ExtResource("1_8314a")
+region = Rect2(60, 121, 30, 37)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ssp60"]
+atlas = ExtResource("1_8314a")
+region = Rect2(90, 121, 30, 37)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_441x1"]
+atlas = ExtResource("1_8314a")
+region = Rect2(0, 82, 30, 38)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3bp68"]
+atlas = ExtResource("1_8314a")
+region = Rect2(30, 82, 30, 38)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dasjn"]
+atlas = ExtResource("1_8314a")
+region = Rect2(60, 82, 30, 38)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gpt5f"]
+atlas = ExtResource("1_8314a")
+region = Rect2(90, 82, 30, 38)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_n7gmn"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t1bk2")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3lnbx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_axd7b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5lw52")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6hyux")
+}],
+"loop": true,
+"name": &"walkBack",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3rjtd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t7iws")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mr137")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ssp60")
+}],
+"loop": true,
+"name": &"walkFoward",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_441x1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3bp68")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dasjn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gpt5f")
+}],
+"loop": true,
+"name": &"walkSide",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ln4so"]
+radius = 0.107207
+height = 0.308734
+
+[sub_resource type="SeparationRayShape3D" id="SeparationRayShape3D_d5dx5"]
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_2ryrr")
+
+[node name="Sprite" type="AnimatedSprite3D" parent="."]
+offset = Vector2(0, 20)
+billboard = 2
+shaded = true
+alpha_cut = 2
+texture_filter = 0
+sprite_frames = SubResource("SpriteFrames_n7gmn")
+animation = &"idle"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.155922, 0)
+shape = SubResource("CapsuleShape3D_ln4so")
+
+[node name="HorizontalPivot" type="Node3D" parent="."]
+script = ExtResource("3_rp3ob")
+
+[node name="VerticalPivot" type="Node3D" parent="HorizontalPivot"]
+
+[node name="SpringArm" type="SpringArm3D" parent="HorizontalPivot/VerticalPivot"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0.5)
+shape = SubResource("SeparationRayShape3D_d5dx5")
+spring_length = 2.0
+
+[node name="Camera3D" type="Camera3D" parent="HorizontalPivot/VerticalPivot/SpringArm"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0691624, 0)
+current = true

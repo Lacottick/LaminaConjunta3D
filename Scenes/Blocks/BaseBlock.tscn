@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=3 uid="uid://c63hghdcrgjn"]
+
+[ext_resource type="Texture2D" uid="uid://0op47y17qgj" path="res://Assets/TileMap.png" id="1_b3ijm"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8ykn0"]
+albedo_texture = ExtResource("1_b3ijm")
+texture_filter = 0
+
+[sub_resource type="BoxMesh" id="BoxMesh_eftrb"]
+material = SubResource("StandardMaterial3D_8ykn0")
+size = Vector3(3, 3, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kjwph"]
+
+[node name="BaseBlock" type="MeshInstance3D"]
+mesh = SubResource("BoxMesh_eftrb")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("BoxShape3D_kjwph")

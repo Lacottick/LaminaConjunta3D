@@ -1,0 +1,40 @@
+[gd_scene load_steps=7 format=3 uid="uid://5p2il1l10ct"]
+
+[ext_resource type="PackedScene" uid="uid://bo2ckip55nyrc" path="res://Scenes/Player/Player.tscn" id="1_5mdlr"]
+[ext_resource type="Script" path="res://Scenes/Main.cs" id="1_8yf8m"]
+[ext_resource type="PackedScene" uid="uid://bgi66hxwke4tx" path="res://Scenes/Map/Map.tscn" id="2_2sa0y"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_x0rn3"]
+resource_local_to_scene = true
+sky_top_color = Color(3.27289e-06, 0.670808, 0.891396, 1)
+sky_horizon_color = Color(0.913725, 0.545098, 0.388235, 1)
+ground_bottom_color = Color(5.11389e-08, 0.0989226, 0.138573, 1)
+ground_horizon_color = Color(0.912498, 0.54695, 0.388243, 1)
+sun_angle_max = 45.0
+sun_curve = 0.409812
+
+[sub_resource type="Sky" id="Sky_yynk5"]
+sky_material = SubResource("ProceduralSkyMaterial_x0rn3")
+
+[sub_resource type="Environment" id="Environment_gh260"]
+background_mode = 2
+sky = SubResource("Sky_yynk5")
+ssao_enabled = true
+ssil_enabled = true
+glow_enabled = true
+glow_bloom = 0.05
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_8yf8m")
+
+[node name="Player" parent="." instance=ExtResource("1_5mdlr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.34171, 0)
+
+[node name="Map" parent="." instance=ExtResource("2_2sa0y")]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.946919, 0.321473, 0, -0.321473, -0.946919, 0, 4.7385, -14.6684)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_gh260")
