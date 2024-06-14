@@ -16,7 +16,7 @@ public partial class Player : CharacterBody3D
 		if (!IsOnFloor())
 			velocity.Y -= gravity * (float)delta;
 
-		if (Input.IsActionJustPressed("ui_accept") && IsOnFloor())
+		if (Input.IsActionJustPressed("jump") && IsOnFloor())
 			velocity.Y = JUMP_VELOCITY;
 
 		Vector2 inputDir = Input.GetVector("move_left", "move_right", "move_foward", "move_back");
@@ -43,18 +43,18 @@ public partial class Player : CharacterBody3D
 		{
 			GetNode<AnimatedSprite3D>("Sprite").Play("idle");
 		}
-		else if (direction.Z == 1)
+		else if (direction.Z >= 0.7 && direction.Z <= 1)
 		{
 			GetNode<AnimatedSprite3D>("Sprite").Play("walkBack");
 		}
-		else if (direction.Z == -1) {
+		else if (direction.Z >= -1 && direction.Z < 0.7) {
 			GetNode<AnimatedSprite3D>("Sprite").Play("walkFoward");
 		}
-		else if (direction.X == -1){
+		else if (direction.X >= -1 && direction.X < 0.7){
 			GetNode<AnimatedSprite3D>("Sprite").FlipH = true;
 			GetNode<AnimatedSprite3D>("Sprite").Play("walkSide");
 		}
-		else if (direction.X == 1){
+		else if (direction.X >= 0.7 && direction.X <= 1){
 			GetNode<AnimatedSprite3D>("Sprite").FlipH = false;
 			GetNode<AnimatedSprite3D>("Sprite").Play("walkSide");
 		}

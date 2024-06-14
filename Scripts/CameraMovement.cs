@@ -4,10 +4,14 @@ using System;
 public partial class CameraMovement : Node3D
 {
 	[Export]
-	public float MouseSens = 3.0f;
+	public float Sensitivity = 5.0f;
 
 	[Export]
-	public float CurrentAngle = 0;
+	public float CurrentAngleX = 0;
+
+	public float CurrentAngleY = 0;
+	
+	private Vector2 Direction = Vector2.Zero;
 
 	public float SpringArmLength {
 		get {
@@ -35,6 +39,8 @@ public partial class CameraMovement : Node3D
 		Delta = delta;
 		// HandleCameraMovement();
 		HandleZoom();
+		this.Direction = Input.GetVector("rotate_left", "rotate_right", "rotate_up", "rotate_down");
+		HandleCameraMovement(this.Direction);
 	}
 
     public override void _Input(InputEvent @event)
@@ -42,26 +48,28 @@ public partial class CameraMovement : Node3D
         base._Input(@event);
 		if(@event is InputEventMouseMotion){
 			InputEventMouseMotion mouseMoveEvent = @event as InputEventMouseMotion;
-			HandleCameraMovement(mouseMoveEvent.Relative.X*0.3f, mouseMoveEvent.Relative.Y*0.3f);
+			this.Direction = new Vector2(mouseMoveEvent.Relative.X, mouseMoveEvent.Relative.Y*0.3f);
 		}
     }
 	
-    public void HandleCameraMovement(InputEventMouseMotion @event){
-		RotateY(
-			(float)Mathf.DegToRad(@event.Relative.Y*0.3f)
-			);
-		float verticalAngle = -@event.Relative.X*0.3f;
-		if(verticalAngle > -45 && verticalAngle < 45){
-			RotateX(Mathf.DegToRad(verticalAngle));
-		}
-	}
-
-	public void HandleCameraMovement(float xStrength, float yStrenght){
-		float input = -xStrength+yStrenght;
-		CurrentAngle = Mathf.Wrap(CurrentAngle+input*MouseSens*(float)Delta, -Mathf.Pi, Mathf.Pi);
+    public void HandleCameraMovement(Vector2 direction){
 		Transform3D newTransform = Transform;
-		newTransform.Basis = new Basis(new Quaternion(Vector3.Up, CurrentAngle));
-		Transform = newTransform;
+		CurrentAngleX = Mathf.Wrap(CurrentAngleX+direction.X*Sensitivity*(float)Delta, -Mathf.Pi*2, Mathf.Pi*2);
+		CurrentAngleY = Mathf.Clamp(CurrentAngleY+direction.Y*Sensitivity*0.3f*(float)Delta, -Mathf.Pi/8, Mathf.Pi/12);
+		Quaternion quaternionX = new(Vector3.Up, CurrentAngleX);
+		Quaternion quaternionY = new(Vector3.ModelLeft, CurrentAngleY);
+		newTransform.Basis = new Basis(quaternionX*quaternionY);
+		using(Tween tween = CreateTween()){
+				tween.SetParallel(true);
+				tween.SetTrans(Tween.TransitionType.Sine);
+				tween.SetEase(Tween.EaseType.Out);
+				tween.TweenProperty(
+					this,
+					"transform",
+					newTransform,
+					0.5
+				);
+		}
 	}
 
 	public void HandleZoom(){
@@ -76,7 +84,6 @@ public partial class CameraMovement : Node3D
 	public void ZoomIn(){
 		if(SpringArmLength>0){
 			using(Tween tween = CreateTween()){
-
 				tween.SetParallel(true);
 				tween.SetTrans(Tween.TransitionType.Sine);
 				tween.SetEase(Tween.EaseType.Out);

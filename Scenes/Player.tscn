@@ -1,8 +1,8 @@
 [gd_scene load_steps=20 format=3 uid="uid://bo2ckip55nyrc"]
 
-[ext_resource type="Script" path="res://Scenes/Player/Player.cs" id="1_2ryrr"]
 [ext_resource type="Texture2D" uid="uid://ddbn8yqjxdmhg" path="res://Assets/Lamina.png" id="1_8314a"]
-[ext_resource type="Script" path="res://Scenes/Player/CameraMovement.cs" id="3_rp3ob"]
+[ext_resource type="Script" path="res://Scripts/Player.cs" id="1_ua8pf"]
+[ext_resource type="Script" path="res://Scripts/CameraMovement.cs" id="3_rp3ob"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_t1bk2"]
 atlas = ExtResource("1_8314a")
@@ -125,7 +125,8 @@ height = 0.308734
 [sub_resource type="SeparationRayShape3D" id="SeparationRayShape3D_d5dx5"]
 
 [node name="Player" type="CharacterBody3D"]
-script = ExtResource("1_2ryrr")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0321329, 0)
+script = ExtResource("1_ua8pf")
 
 [node name="Sprite" type="AnimatedSprite3D" parent="."]
 offset = Vector2(0, 20)
@@ -134,10 +135,10 @@ shaded = true
 alpha_cut = 2
 texture_filter = 0
 sprite_frames = SubResource("SpriteFrames_n7gmn")
-animation = &"idle"
+animation = &"walkSide"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.155922, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.156, 0)
 shape = SubResource("CapsuleShape3D_ln4so")
 
 [node name="HorizontalPivot" type="Node3D" parent="."]
