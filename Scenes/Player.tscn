@@ -1,8 +1,11 @@
-[gd_scene load_steps=20 format=3 uid="uid://bo2ckip55nyrc"]
+[gd_scene load_steps=21 format=3 uid="uid://bo2ckip55nyrc"]
 
 [ext_resource type="Texture2D" uid="uid://ddbn8yqjxdmhg" path="res://Assets/Lamina.png" id="1_8314a"]
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="1_ua8pf"]
+[ext_resource type="Shape3D" uid="uid://dv4sf861hvwxt" path="res://Resources/PlayerCapsuleShape.tres" id="3_da1re"]
 [ext_resource type="Script" path="res://Scripts/CameraMovement.cs" id="3_rp3ob"]
+[ext_resource type="Script" path="res://Scripts/HitboxComponent.cs" id="5_ajl84"]
+[ext_resource type="Script" path="res://Scripts/HpComponent.cs" id="6_pv3ya"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_t1bk2"]
 atlas = ExtResource("1_8314a")
@@ -118,14 +121,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ln4so"]
-radius = 0.107207
-height = 0.308734
-
-[sub_resource type="SeparationRayShape3D" id="SeparationRayShape3D_d5dx5"]
-
 [node name="Player" type="CharacterBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0321329, 0)
 script = ExtResource("1_ua8pf")
 
 [node name="Sprite" type="AnimatedSprite3D" parent="."]
@@ -139,19 +135,29 @@ animation = &"walkSide"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.156, 0)
-shape = SubResource("CapsuleShape3D_ln4so")
+shape = ExtResource("3_da1re")
 
-[node name="HorizontalPivot" type="Node3D" parent="."]
+[node name="VerticalPivot" type="Node3D" parent="."]
 script = ExtResource("3_rp3ob")
 
-[node name="VerticalPivot" type="Node3D" parent="HorizontalPivot"]
-
-[node name="SpringArm" type="SpringArm3D" parent="HorizontalPivot/VerticalPivot"]
+[node name="SpringArm" type="SpringArm3D" parent="VerticalPivot"]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0.5)
-shape = SubResource("SeparationRayShape3D_d5dx5")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 spring_length = 2.0
+margin = 0.5
 
-[node name="Camera3D" type="Camera3D" parent="HorizontalPivot/VerticalPivot/SpringArm"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0691624, 0)
+[node name="Camera3D" type="Camera3D" parent="VerticalPivot/SpringArm"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
 current = true
+size = 2.0
+
+[node name="HitboxComponent" type="Area3D" parent="." node_paths=PackedStringArray("HpComponent")]
+script = ExtResource("5_ajl84")
+HpComponent = NodePath("../HpComponent")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HitboxComponent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.156, 0)
+shape = ExtResource("3_da1re")
+
+[node name="HpComponent" type="Node" parent="."]
+script = ExtResource("6_pv3ya")

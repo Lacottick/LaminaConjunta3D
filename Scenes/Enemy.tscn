@@ -1,0 +1,60 @@
+[gd_scene load_steps=9 format=3 uid="uid://ddrxc1t25t542"]
+
+[ext_resource type="Texture2D" uid="uid://csh08mu3ibglo" path="res://inimigoUnity.png" id="1_opjqm"]
+[ext_resource type="Shape3D" uid="uid://vo6xihujjs25" path="res://Resources/EnemyShape.tres" id="2_4l6rn"]
+[ext_resource type="Script" path="res://Scripts/HpComponent.cs" id="3_xqs5n"]
+[ext_resource type="Script" path="res://Scripts/HitboxComponent.cs" id="4_surth"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a0tny"]
+atlas = ExtResource("1_opjqm")
+region = Rect2(0, 0, 37, 35)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5ls47"]
+atlas = ExtResource("1_opjqm")
+region = Rect2(82, 0, 43, 35)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x40p2"]
+atlas = ExtResource("1_opjqm")
+region = Rect2(38, 0, 43, 35)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_x272w"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a0tny")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5ls47")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x40p2")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Enemy" type="RigidBody3D"]
+
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
+offset = Vector2(0, 18)
+billboard = 2
+alpha_cut = 2
+texture_filter = 0
+sprite_frames = SubResource("SpriteFrames_x272w")
+frame_progress = 0.307658
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.156, 0)
+shape = ExtResource("2_4l6rn")
+
+[node name="HpComponent" type="Node" parent="."]
+script = ExtResource("3_xqs5n")
+
+[node name="HitboxComponent" type="Area3D" parent="." node_paths=PackedStringArray("HpComponent")]
+script = ExtResource("4_surth")
+HpComponent = NodePath("../HpComponent")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HitboxComponent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.156, 0)
+shape = ExtResource("2_4l6rn")

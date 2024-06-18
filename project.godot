@@ -23,6 +23,15 @@ window/size/mode=3
 
 project/assembly_name="TesteCSharp"
 
+[file_customization]
+
+folder_colors={
+"res://Assets/": "teal",
+"res://Resources/": "gray",
+"res://Scenes/": "blue",
+"res://Scripts/": "purple"
+}
+
 [input]
 
 zoom_in={

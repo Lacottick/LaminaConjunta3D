@@ -1,8 +1,6 @@
 using Godot;
-using System;
-using System.Runtime.CompilerServices;
 
-public partial class Player : CharacterBody3D
+public partial class Player : CharacterBody3D, EntityWithHitbox
 {
 	public const float SPEED = 5.0f;
 	public const float JUMP_VELOCITY = 4.5f;
@@ -20,8 +18,8 @@ public partial class Player : CharacterBody3D
 			velocity.Y = JUMP_VELOCITY;
 
 		Vector2 inputDir = Input.GetVector("move_left", "move_right", "move_foward", "move_back");
-		Vector3 moveDirection = (GetNode<Node3D>("HorizontalPivot").Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
-		Vector3 animationDirection =(Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
+		Vector3 moveDirection = (GetNode<Node3D>("VerticalPivot").Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
+		Vector3 animationDirection =new Vector3(inputDir.X, 0, inputDir.Y).Normalized();
 		HandleAnimation(animationDirection);
 		if (moveDirection != Vector3.Zero)
 		{
@@ -43,21 +41,27 @@ public partial class Player : CharacterBody3D
 		{
 			GetNode<AnimatedSprite3D>("Sprite").Play("idle");
 		}
-		else if (direction.Z >= 0.7 && direction.Z <= 1)
+		else if (direction.Z == 1)
 		{
 			GetNode<AnimatedSprite3D>("Sprite").Play("walkBack");
 		}
-		else if (direction.Z >= -1 && direction.Z < 0.7) {
+		else if (direction.Z == -1) {
 			GetNode<AnimatedSprite3D>("Sprite").Play("walkFoward");
 		}
-		else if (direction.X >= -1 && direction.X < 0.7){
+		else if (direction.X == -1){
 			GetNode<AnimatedSprite3D>("Sprite").FlipH = true;
 			GetNode<AnimatedSprite3D>("Sprite").Play("walkSide");
 		}
-		else if (direction.X >= 0.7 && direction.X <= 1){
+		else if (direction.X == 1){
 			GetNode<AnimatedSprite3D>("Sprite").FlipH = false;
 			GetNode<AnimatedSprite3D>("Sprite").Play("walkSide");
 		}
 
 	}
+
+    public void BodyEntered(Node3D body)
+    {
+        throw new System.NotImplementedException();
+    }
+
 }
