@@ -1,5 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://ddrxc1t25t542"]
+[gd_scene load_steps=10 format=3 uid="uid://ddrxc1t25t542"]
 
+[ext_resource type="Script" path="res://Scenes/Enemy.cs" id="1_480cs"]
 [ext_resource type="Texture2D" uid="uid://csh08mu3ibglo" path="res://inimigoUnity.png" id="1_opjqm"]
 [ext_resource type="Shape3D" uid="uid://vo6xihujjs25" path="res://Resources/EnemyShape.tres" id="2_4l6rn"]
 [ext_resource type="Script" path="res://Scripts/HpComponent.cs" id="3_xqs5n"]
@@ -35,6 +36,7 @@ animations = [{
 }]
 
 [node name="Enemy" type="RigidBody3D"]
+script = ExtResource("1_480cs")
 
 [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
 offset = Vector2(0, 18)
