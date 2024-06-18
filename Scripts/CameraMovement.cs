@@ -4,14 +4,17 @@ using System;
 public partial class CameraMovement : Node3D
 {
 	[Export]
-	public float Sensitivity = 5.0f;
+	public float JoyStickSensitivity = 5.0f;
 
 	[Export]
+	public float MouseSensitivity = 0.1f;
 	public float CurrentAngleX = 0;
 
 	public float CurrentAngleY = 0;
 	
-	private Vector2 Direction = Vector2.Zero;
+	public Vector2 Direction = Vector2.Zero;
+
+	public InputEvent MouseMoveEvent ;
 
 	public float SpringArmLength {
 		get {
@@ -40,22 +43,30 @@ public partial class CameraMovement : Node3D
 		// HandleCameraMovement();
 		HandleZoom();
 		this.Direction = Input.GetVector("rotate_left", "rotate_right", "rotate_up", "rotate_down");
-		HandleCameraMovement(this.Direction);
+		if(this.Direction != Vector2.Zero){
+			HandleCameraMovementJoystick(this.Direction);
+		}
+		if(MouseMoveEvent is InputEventMouseMotion){
+			InputEventMouseMotion mouseMoveEvent = MouseMoveEvent as InputEventMouseMotion;
+			this.Direction = new Vector2(-mouseMoveEvent.Relative.X, -mouseMoveEvent.Relative.Y);
+			HandleCameraMovementMouse(this.Direction);
+		}
 	}
 
     public override void _Input(InputEvent @event)
     {
         base._Input(@event);
 		if(@event is InputEventMouseMotion){
-			InputEventMouseMotion mouseMoveEvent = @event as InputEventMouseMotion;
-			this.Direction = new Vector2(mouseMoveEvent.Relative.X, mouseMoveEvent.Relative.Y*0.3f);
+			this.MouseMoveEvent = @event;
+		}
+		else {
+			this.MouseMoveEvent = null;
 		}
     }
-	
-    public void HandleCameraMovement(Vector2 direction){
+	public void HandleCameraMovementJoystick(Vector2 direction){
 		Transform3D newTransform = Transform;
-		CurrentAngleX = Mathf.Wrap(CurrentAngleX+direction.X*Sensitivity*(float)Delta, -Mathf.Pi*2, Mathf.Pi*2);
-		CurrentAngleY = Mathf.Clamp(CurrentAngleY+direction.Y*Sensitivity*0.3f*(float)Delta, -Mathf.Pi/8, Mathf.Pi/12);
+		CurrentAngleX = Mathf.Wrap(CurrentAngleX+direction.X*JoyStickSensitivity*(float)Delta, -Mathf.Pi*2, Mathf.Pi*2);
+		CurrentAngleY = Mathf.Clamp(CurrentAngleY+direction.Y*JoyStickSensitivity*0.3f*(float)Delta, -Mathf.Pi/8, Mathf.Pi/12);
 		Quaternion quaternionX = new(Vector3.Up, CurrentAngleX);
 		Quaternion quaternionY = new(Vector3.ModelLeft, CurrentAngleY);
 		newTransform.Basis = new Basis(quaternionX*quaternionY);
@@ -70,6 +81,15 @@ public partial class CameraMovement : Node3D
 					0.5
 				);
 		}
+	}
+    public void HandleCameraMovementMouse(Vector2 direction){
+		Transform3D newTransform = Transform;
+		CurrentAngleX = Mathf.Wrap(CurrentAngleX+direction.X*MouseSensitivity*(float)Delta, -Mathf.Pi*2, Mathf.Pi*2);
+		CurrentAngleY = Mathf.Clamp(CurrentAngleY+direction.Y*MouseSensitivity*0.3f*(float)Delta, -Mathf.Pi/8, Mathf.Pi/12);
+		Quaternion quaternionX = new(Vector3.Up, CurrentAngleX);
+		Quaternion quaternionY = new(Vector3.ModelLeft, CurrentAngleY);
+		newTransform.Basis = new Basis(quaternionX*quaternionY);
+		this.Transform = newTransform;
 	}
 
 	public void HandleZoom(){
