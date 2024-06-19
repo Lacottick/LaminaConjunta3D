@@ -3,8 +3,8 @@
 [ext_resource type="Script" path="res://Scenes/Enemy.cs" id="1_480cs"]
 [ext_resource type="Texture2D" uid="uid://csh08mu3ibglo" path="res://inimigoUnity.png" id="1_opjqm"]
 [ext_resource type="Shape3D" uid="uid://vo6xihujjs25" path="res://Resources/EnemyShape.tres" id="2_4l6rn"]
-[ext_resource type="Script" path="res://Scripts/HpComponent.cs" id="3_xqs5n"]
-[ext_resource type="Script" path="res://Scripts/HitboxComponent.cs" id="4_surth"]
+[ext_resource type="Script" path="res://Scripts/Components/HpComponent.cs" id="3_xqs5n"]
+[ext_resource type="Script" path="res://Scripts/Components/HitboxComponent.cs" id="4_surth"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_a0tny"]
 atlas = ExtResource("1_opjqm")

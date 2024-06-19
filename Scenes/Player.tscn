@@ -4,8 +4,8 @@
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="1_ua8pf"]
 [ext_resource type="Shape3D" uid="uid://dv4sf861hvwxt" path="res://Resources/PlayerCapsuleShape.tres" id="3_da1re"]
 [ext_resource type="Script" path="res://Scripts/CameraMovement.cs" id="3_rp3ob"]
-[ext_resource type="Script" path="res://Scripts/HitboxComponent.cs" id="5_ajl84"]
-[ext_resource type="Script" path="res://Scripts/HpComponent.cs" id="6_pv3ya"]
+[ext_resource type="Script" path="res://Scripts/Components/HitboxComponent.cs" id="5_ajl84"]
+[ext_resource type="Script" path="res://Scripts/Components/HpComponent.cs" id="6_pv3ya"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_t1bk2"]
 atlas = ExtResource("1_8314a")
